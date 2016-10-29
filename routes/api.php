@@ -104,6 +104,8 @@ Route::group(['middleware' => 'jwt.auth'], function(){
   Route::get('program_intervensi/{program_intervensi_id}/rincian','ProgramIntervensi\ProsesIntervensiController@rincianIndex');
   Route::get('program_intervensi/{program_intervensi_id}/intervensi_index','ProgramIntervensi\ProsesIntervensiController@intervensiIndex');
 
+ 
 
 
 });
+ Route::get('tools/export/index','Tools\ExportController@index');

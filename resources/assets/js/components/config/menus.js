@@ -177,5 +177,25 @@ module.exports = [
         ]
       }
     ]
+  },
+  {
+    name: 'Tools',
+    link: '#',
+    icon: 'fa-shield',
+    roles: [
+      {name: 'admin'},
+      {name: 'manager'}
+    ],
+    child:[
+      {
+        name: 'Export Data',
+        link: '/export',
+        icon: 'fa-plus-circle',
+        roles: [
+          {name: 'admin'}
+        ]
+      }
+    ]
   }
+
 ]

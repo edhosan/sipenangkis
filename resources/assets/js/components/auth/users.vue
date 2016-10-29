@@ -252,7 +252,7 @@ export default {
       this.$http.get(url).then((response)=>{
         this.$set('items', response.data.data)
         this.$set('pagination', response.data)
-        this.$Progress.finsh()
+        this.$Progress.finish()
       },(error)=>{
         console.log(error)
         this.$Progress.fail()

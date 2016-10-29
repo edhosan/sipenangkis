@@ -103,7 +103,8 @@ Vue.http.interceptors.push((request, next) => {
        '/form_intervensi/:id': { component: require('./components/program_intervensi/form_intervensi.vue') }
 
      }
-    }
+    },
+    '/export':{component: require('./components/tools/import.vue') },
  })
 
 router.start(App, '#app');

@@ -16,7 +16,6 @@
   <!-- Theme style -->
   <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/dist/css/AdminLTE.min.css') }}">
   <!-- iCheck -->
-  <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/plugins/iCheck/square/blue.css') }}">
   <link rel="stylesheet" href="{{ asset('bower_components/AdminLTE/dist/css/skins/_all-skins.min.css') }}">
   <link rel="stylesheet" href="{{ asset('bower_components/toastr/toastr.min.css') }}">
 
@@ -34,20 +33,13 @@
 <!-- Bootstrap 3.3.6 -->
 <script src="{{ asset('bower_components/AdminLTE/bootstrap/js/bootstrap.min.js') }}"></script>
 <!-- iCheck -->
-<script src="{{ asset('bower_components/AdminLTE/plugins/iCheck/icheck.min.js') }}"></script>
 <script src="{{ asset('bower_components/AdminLTE/plugins/slimScroll/jquery.slimscroll.min.js') }}"></script>
 <script src="{{ asset('bower_components/AdminLTE/plugins/fastclick/fastclick.js') }}"></script>
 <script src="{{ asset('bower_components/AdminLTE/dist/js/app.min.js') }}"></script>
 <script src="{{ asset('bower_components/toastr/toastr.min.js') }}"></script>
 <script src="{{ asset("bower_components/AdminLTE/plugins/chartjs/Chart.min.js") }}"></script>
 <script>
-  $(function () {
-    $('input').iCheck({
-      checkboxClass: 'icheckbox_square-blue',
-      radioClass: 'iradio_square-blue',
-      increaseArea: '20%' // optional
-    });
-  });
+ 
   //iCheck for checkbox and radio inputs
       $(function () {
         var areaChartData = {
