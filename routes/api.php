@@ -79,6 +79,8 @@ Route::group(['middleware' => 'jwt.auth'], function(){
   Route::get('pendidikan/ref_pendidikan','DataMaster\PendidikanController@refPendidikan');
 
   Route::get('kluster/index','DataMaster\KlusterController@index');
+  Route::post('kluster/store','DataMaster\KlusterController@store');
+  Route::post('kluster/{id}/update','DataMaster\KlusterController@update');
 
   Route::get('keluarga/ref_hubungan','PenerimaManfaat\KeluargaController@getHubungan');
   Route::get('keluarga/ref_status','PenerimaManfaat\KeluargaController@getStatus');
@@ -91,9 +93,10 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 
   Route::get('penerima_indikator/{penerima_id}/index','PenerimaManfaat\TindikatorController@index');
   Route::post('penerima_indikator/{penerima_id}/store','PenerimaManfaat\TindikatorController@store');
+  Route::get('penerima_indikator/{penerima_id}/new','PenerimaManfaat\TindikatorController@newIndikator');
 
   Route::post('penerima_manfaat/store','PenerimaManfaat\PenerimaManfaatController@store');
-
+  Route::get('penerima_manfaat/{id}/index','PenerimaManfaat\PenerimaManfaatController@getPenerimaManfaat');
 
   Route::get('pembaharuan/index','PenerimaManfaat\PembaharuanRTMController@index');
 
@@ -104,8 +107,12 @@ Route::group(['middleware' => 'jwt.auth'], function(){
   Route::get('program_intervensi/{program_intervensi_id}/rincian','ProgramIntervensi\ProsesIntervensiController@rincianIndex');
   Route::get('program_intervensi/{program_intervensi_id}/intervensi_index','ProgramIntervensi\ProsesIntervensiController@intervensiIndex');
 
- 
+  Route::get('tools/export/index','Tools\ExportController@index');
+  Route::post('tools/export/store','Tools\ExportController@store');
+
+  Route::get('dashboard','DashboardController@totalMiskin');
 
 
 });
- Route::get('tools/export/index','Tools\ExportController@index');
+
+

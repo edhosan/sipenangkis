@@ -12,6 +12,8 @@
  var Resource = require('vue-resource');
  var moment = require('vue-moment');
  var VuetablePagination = require('vuetable/src/components/VuetablePaginationBootstrap.vue')
+ var VuetablePaginationDropdown = require('vuetable/src/components/VuetablePaginationDropdown.vue')
+ var VuetablePaginationPager = require('./components/ui/VuetablePaginationBootstrapPager.vue')
  import VueProgressBar from 'vue-progressbar'
 
 
@@ -38,12 +40,15 @@ Vue.use(VueProgressBar, {
  Vue.use(moment)
 
  Vue.component('vuetable-pagination', VuetablePagination)
+ Vue.component('vuetable-pagination-dropdown', VuetablePaginationDropdown)
+ Vue.component('vuetable-pagination-pager', VuetablePaginationPager)
 
  Vue.http.options.root = '/root';
  Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 
 Vue.http.interceptors.push((request, next) => {
     next((response)=>{
+      //console.log(response)
     });
 });
 

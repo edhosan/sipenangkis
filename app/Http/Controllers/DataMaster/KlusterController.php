@@ -47,6 +47,8 @@ class KlusterController extends Controller
     $kluster->name = $request->input('name');
     $kluster->min = $request->input('min');
     $kluster->max = $request->input('max');
+    $kluster->icon = $request->input('icon');
+    $kluster->class = $request->input('class');
     $kluster->save();
 
     foreach ($request->input('kategori') as $key => $value) {
@@ -62,6 +64,8 @@ class KlusterController extends Controller
     $kluster->name = $request->input('name');
     $kluster->min = $request->input('min');
     $kluster->max = $request->input('max');
+    $kluster->icon = $request->input('icon');
+    $kluster->class = $request->input('class');
     $kluster->update();
 
     DB::table('m_kluster_m_kategori')->where('m_kluster_m_kategori.m_kluster_id',$id)->delete();

@@ -101,7 +101,7 @@ export default {
       sortOrder: [
         { field: 'id', direction: 'asc' }
       ],
-      paginationComponent: 'vuetable-pagination',
+      paginationComponent: 'vuetable-pagination-pager',
       itemActions: [
            { name: 'edit-item', label: '', icon: 'glyphicon glyphicon-pencil', class: 'btn btn-warning'},
            { name: 'delete-item', label: '', icon: 'glyphicon glyphicon-remove', class: 'btn btn-danger' }

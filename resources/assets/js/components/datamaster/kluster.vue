@@ -86,6 +86,14 @@
                 <span class="help-block" v-if="!validation.max">Maximum nilai harus diisi.</span>
                 <span class="help-block" v-if="!validation.max_angka">Maximum nilai harus angka.</span>
               </div>
+              <div class="form-group">
+                <label for="frmNama">Icon</label>
+                <input type="text" class="form-control" id="frmNama" placeholder="Icon" v-model="kluster.icon" :disabled="isFreeze">
+              </div>
+              <div class="form-group">
+                <label for="frmNama">Class</label>
+                <input type="text" class="form-control" id="frmNama" placeholder="Class" v-model="kluster.class" :disabled="isFreeze">
+              </div>
               <div class="form-group" v-bind:class="{'has-error':!validation.kategori}">
                 <label>Kategori Indikator:</label>
                 <multiselect
@@ -137,7 +145,7 @@ export default {
         to: 1,
         total: 0
       },
-      kluster: {id:null,name:'',min:0,max:0,kategori:[]},
+      kluster: {id:null,name:'',min:0,max:0,icon:'', class:'', kategori:[]},
       kategori:[],
       valueKategori:[]
     }

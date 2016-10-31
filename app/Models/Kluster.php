@@ -12,4 +12,9 @@ class Kluster extends Model
     {
         return $this->belongsToMany('App\Models\KategoriIndikator','m_kluster_m_kategori','m_kluster_id','m_kategori_id');
     }
+
+    public function hasilPenilaian()
+    {
+    	return $this->hasMany('App\Models\PenilaianPenerimaManfaat','m_kluster_id');
+    }
 }

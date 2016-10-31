@@ -7,8 +7,8 @@
 
     		<form role="form" @submit.prevent="simpan">
 		      <div class="box-body">
-		        <div class="col-md-12">
-		         <div class="form-group" v-bind:class="{'has-error':!validation.kecamatan}">
+		        <div class="col-md-10">
+		         <div class="form-group col-md-5" v-bind:class="{'has-error':!validation.kecamatan}">
 		            <label for="frmNama">Kecamatan</label>
 		            <multiselect
 		              :selected.sync="valueKecamatan"
@@ -23,9 +23,9 @@
 		              key="value"
 		              @update="updateKecamatan" :disabled="isfreeze">
 		            </multiselect>
-		            <span class="help-block" v-if="!validation.kecamatan">Kecamatan harus diisi.</span>
+                    <span class="help-block" v-if="!validation.kecamatan">Kecamatan harus diisi.</span>
 		          </div>		         		         
-		          <div class="form-group" v-bind:class="{'has-error':!validation.desa}">
+		          <div class="form-group col-md-5" v-bind:class="{'has-error':!validation.desa}">
 		            <label for="frmNama">Kelurahan/Desa</label>
 		            <multiselect
 		              :selected.sync="valueDesa"
@@ -41,15 +41,46 @@
 		              key="value"
 		              @update="updateDesa" :disabled="isfreeze">
 		            </multiselect>
-		            <span class="help-block" v-if="!validation.desa">Desa harus diisi.</span>
+	                <span class="help-block" v-if="!validation.desa">Kelurahan/Desa harus diisi.</span>
 		          </div>		         
 		        </div>
 
-		        <div class="table-responsive col-md-5">
-		        	 <vuetable v-ref:vuetable
-			            :api-url="url"
+		      	<div class="form-group col-md-5" v-bind:class="{'has-error':!validation.row}">
+		      	  	<div class="table-responsive ">
+			        	 <vuetable v-ref:vuetable
+				            :api-url="url"
+				            pagination-path=""
+				            :fields="fields"
+				            :sort-order="sortOrder"
+				            table-class="table table-bordered table-striped table-hover"
+				            ascending-icon="glyphicon glyphicon-chevron-up"
+				            descending-icon="glyphicon glyphicon-chevron-down"
+				            pagination-class=""
+				            pagination-info-class=""
+				            pagination-component-class=""
+				            :pagination-component="paginationComponent"			    
+				            :per-page="per_page"
+				            :append-params="moreParams"
+				            wrapper-class="vuetable-wrapper "
+				            table-wrapper=".vuetable-wrapper"
+				            loading-class="loading"
+				            :selected-to="selectedRow"
+				        ></vuetable>
+			        
+			        </div>
+		      		<span class="help-block" v-if="!validation.row">Checklist baris yang akan diexport</span>
+		      	</div>
+
+		        <div class="col-md-1">
+		        	<button type="submit" class="btn btn-primary" :disabled="!isValid">Export</button>		      	
+		      	</div>
+
+
+		      	<div class="table-responsive col-md-6">
+		      		 <vuetable v-ref:vuetable
+			            :api-url="url2"
 			            pagination-path=""
-			            :fields="fields"
+			            :fields="fields2"
 			            :sort-order="sortOrder"
 			            table-class="table table-bordered table-striped table-hover"
 			            ascending-icon="glyphicon glyphicon-chevron-up"
@@ -59,20 +90,13 @@
 			            pagination-component-class=""
 			            :pagination-component="paginationComponent"			    
 			            :per-page="per_page"
+			            :append-params="moreParams2"
 			            wrapper-class="vuetable-wrapper "
 			            table-wrapper=".vuetable-wrapper"
-			            loading-class="loading"
-			            :selected-to="selectedRow"
+			            loading-class="loading"			        
 			        ></vuetable>
-		        </div>
-
-		        <div class="col-md-2">
-		        	<button type="submit" class="btn btn-primary" :disabled="!isValid">Simpan</button>		      	
 		      	</div>
-
-		      	<div class="col-md-5">
-		      		
-		      	</div>
+		      
 
 		      <!-- /.box-body -->
 		      </div>
@@ -97,26 +121,36 @@ export default{
 			isLoading: false,
 			per_page: 100,
 		  	fields:[
+	     	  	{ name: '__checkbox:id'},
+		        { name: '__sequence', title:'No.' },
 		        { name:'id', sortField: 'id' },
 		        { name:'no_kk', sortField: 'no_kk', title:'NKK' },
 		        { name:'nama', sortField: 'nama' },
-		        { name: '__checkbox:id'},
-		        { name: '__sequence' }
+  		        { name:'nm_kel', sortField: 'nm_kel', title:'Kampung/Kelurahan' }
+		       
 	      	],
 	      	sortOrder: [
 		        { field: 'id', direction: 'asc' }
 		    ],
-		    paginationComponent: 'vuetable-pagination',
-		    desa_name:'%'
+		    paginationComponent: 'vuetable-pagination-pager',
+			moreParams: [],
+			url2: this.$root.$config.API + '/api/pembaharuan/index',
+			fields2:[	     	  
+		        { name: '__sequence', title:'No.' },		     
+		        { name:'nkk', sortField: 'nkk', title:'NKK' },
+		        { name:'nama', sortField: 'nama' },
+		        { name:'alamat', sortField: 'alamat' },
+		        { name:'desa', sortField: 'desa', title:'Kelurahan/Desa' },
+		        { name:'kecamatan', sortField: 'kecamatan', title:'Kecamatan' },
+		        { name:'kriteria', sortField: 'kriteria'},		       
+	      	],
+	      	moreParams2: [],
 		}
 	},
 
 	computed: {
-		validation: function(){
-	      return{
-	        desa:!!this.valueDesa.value,
-	        kecamatan:!!this.valueKecamatan.value
-	      }
+	    url: function(){
+	    	return this.$root.$config.API + '/api/tools/export/index'
 	    },
 
 	    isValid: function(){
@@ -126,28 +160,25 @@ export default{
 	      })
 	    },
 
-	    url: function(){
-	    	return this.$root.$config.API + '/api/tools/export/index'
-	    }
+	    validation: function(){
+	      return{
+	        row:!!this.selectedRow.length > 0,
+	        kecamatan:!!this.valueKecamatan.value,
+	        desa:!!this.valueDesa.value
+	      }
+	    },
 	},
 
 	ready(){
 		this.fetchKecamatan()
 	},
 
-	methods:{
-		 preg_quote: function( str ) {
-	         return (str+'').replace(/([\\\.\+\*\?\[\^\]\$\(\)\{\}\=\!\<\>\|\:])/g, "\\$1");
-	     },
-	     highlight: function(needle, haystack) {
-	         return haystack.replace(
-	             new RegExp('(' + this.preg_quote(needle) + ')', 'ig'),
-	             '<span class="highlight">$1</span>'
-	         )
-	     },
+	methods:{		
 
 		updateDesa: function(value){
-			this.valueDesa = value			
+			this.valueDesa = value
+			this.setFilter(value.label)
+			this.setFilter2(value.value)			
 		},
 
 		updateKecamatan: function(value){
@@ -185,11 +216,59 @@ export default{
 	        console.log(error)
 	      })
 	    },
+
+	    setFilter: function(value) {
+	        if(value != null){
+	          this.moreParams = [
+	              'filter='+ value,
+	              'key=nm_kel'
+	          ]
+	          this.$nextTick(function() {
+	              this.$broadcast('vuetable:refresh')
+	          })
+	        }
+	    },
+
+	    setFilter2: function(value) {
+	        if(value != null){
+	          this.moreParams2 = [
+	              'filter='+ value,
+	              'key=m_desa.id'
+	          ]
+	          this.$nextTick(function() {
+	              this.$broadcast('vuetable:refresh')
+	          })
+	        }
+	    },
+
+	    simpan: function(){	     
+	      this.$Progress.start()
+	      event.preventDefault()
+	      var self = this
+
+	      var data = { data: this.selectedRow, desa_id: this.valueDesa.value }
+	      var url = this.$root.$config.API + '/api/tools/export/store'
+
+	      this.$http.post(url,data).then((response)=>{
+	        toastr.success('Export Data Berhasil', 'Export Data', {timeOut: 3000})
+	        this.selectedRow = []
+	        this.$broadcast('vuetable:refresh')
+	        this.$Progress.finish()
+	      },(error)=>{
+	        if(error.data.error.code==23000){
+	          toastr.error('Duplikat data entry.', 'Error', {timeOut: 3000})
+	        }else{
+	          toastr.error('Export Data Gagal', 'Error', {timeOut: 3000})
+	        }
+	        console.log(error)
+	        this.$Progress.fail()
+	      })
+	    },
 	},
 
 	components: { 
 		Multiselect, 
-		'vuetable': Vuetable, 
+		'vuetable': Vuetable		
 	},
 
 	route: {

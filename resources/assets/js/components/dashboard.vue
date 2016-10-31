@@ -1,62 +1,19 @@
 <template>
 <div class="row">
-  <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-aqua"><i class="fa fa-user"></i></span>
+  <template v-for="total in totalKluster">
+    <div class="col-md-3 col-sm-6 col-xs-12">
+      <div class="info-box">
+        <span class="info-box-icon {{ total.class }}"><i class="{{ total.icon }}"></i></span>
 
-      <div class="info-box-content">
-        <span class="info-box-text">Hampir Miskin</span>
-        <span class="info-box-number">4.127 <small>KK</small></span>
+        <div class="info-box-content">
+          <span class="info-box-text">{{ total.name }}</span>
+          <span class="info-box-number">{{ total.total }} <small>KK</small></span>
+        </div>
+        <!-- /.info-box-content -->
       </div>
-      <!-- /.info-box-content -->
+      <!-- /.info-box -->
     </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-
-  <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-red"><i class="fa fa-users"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">Rentan Miskin</span>
-        <span class="info-box-number">907 <small>KK</small></span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-
-  <!-- fix for small devices only -->
-  <div class="clearfix visible-sm-block"></div>
-
-  <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-green"><i class="fa fa-user-secret"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">Miskin</span>
-        <span class="info-box-number">3.037 <small>KK</small></span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
-  <div class="col-md-3 col-sm-6 col-xs-12">
-    <div class="info-box">
-      <span class="info-box-icon bg-yellow"><i class="ion ion-ios-people-outline"></i></span>
-
-      <div class="info-box-content">
-        <span class="info-box-text">Sangat Miskin</span>
-        <span class="info-box-number">620 <small>KK</small></span>
-      </div>
-      <!-- /.info-box-content -->
-    </div>
-    <!-- /.info-box -->
-  </div>
-  <!-- /.col -->
+  </template>
 </div>
 <!-- /.row -->
 <div class="row">
@@ -101,13 +58,28 @@ module.exports = {
     name: "Dashboard",
     data: function() {
         return {
+          totalKluster:[]
         }
     },
     ready: function(){
-
+      this.fetchData()
+      
     },
     component:{ 
-      
+    
+    },
+    methods:{
+      fetchData: function(page) {
+        this.$Progress.start()
+        var url = this.$root.$config.API + '/api/dashboard'
+        this.$http.get(url).then((response)=>{
+          this.$set('totalKluster', response.data)
+          this.$Progress.finish()
+        },(error)=>{
+          console.log(error)
+          this.$Progress.fail()
+        })
+      },
     },
     route: {
         activate: function(t) {

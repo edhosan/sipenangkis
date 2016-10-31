@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
-use Illuminate\Pagination\LengthAwarePaginator;
 use App\Models\PenerimaManfaat;
 use DB;
 
@@ -23,8 +22,7 @@ class PembaharuanRTMController extends Controller
                 $query->on('tbl.id','=','t_pm_penilaian.id');
               })
               ->where('m_penerima_manfaat_keluarga.hubungan','01')
-              ->select('m_penerima_manfaat.id','m_penerima_manfaat.nkk',DB::raw('concat(m_penerima_manfaat.alamat ," ", m_penerima_manfaat.rt," ",m_penerima_manfaat.rw) as alamat'),
-                       'm_penerima_manfaat_keluarga.nama','m_penerima_manfaat_keluarga.sex','m_kecamatan.name as kecamatan','m_desa.name as desa','t_pm_penilaian.nilai','t_pm_penilaian.kriteria');
+              ->select('m_penerima_manfaat.id','m_penerima_manfaat.nkk',DB::raw('concat(m_penerima_manfaat.alamat ," ", m_penerima_manfaat.rt," ",m_penerima_manfaat.rw) as alamat'),'m_penerima_manfaat_keluarga.nama','m_penerima_manfaat_keluarga.sex','m_kecamatan.name as kecamatan','m_desa.name as desa','t_pm_penilaian.nilai','t_pm_penilaian.kriteria');
 
     if($request->has('sort')){
       list($sortCol, $sortDir) = explode('|', $request->sort);
@@ -36,23 +34,18 @@ class PembaharuanRTMController extends Controller
     if($request->exists('filter')){
       if($request->exists('key')){
         $query->where(function($q) use($request){
-          $value = "%{$request->filter}%";
+          $value = "{$request->filter}";
           $key = "{$request->key}";
           $q->where($key, 'like', $value);
         });
       }
     }
 
-    $perPage = $request->has('per_page') ? (int) $request->per_page : null;
-    $page = $request->has('page') ? (int) $request->page : 1;
+    $perPage = $request->has('per_page') ? (int) $request->per_page : 10;
 
-    $result = $query->get()->toArray();
-    $offset = ($page * $perPage) - $perPage;
-    $itemCurrentPage = array_slice($result, $offset, $perPage, true);
-    $result = new LengthAwarePaginator($itemCurrentPage, count($result), $perPage, $page);
-    $result = $result->toArray();
+    $result = $query->paginate($perPage);
 
-    return $result;
+    return response()->json($result);
   }
 
   public function delete($id)
