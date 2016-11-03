@@ -110,9 +110,11 @@ Route::group(['middleware' => 'jwt.auth'], function(){
   Route::get('tools/export/index','Tools\ExportController@index');
   Route::post('tools/export/store','Tools\ExportController@store');
 
-  Route::get('dashboard','DashboardController@totalMiskin');
+  Route::get('dashboard','DashboardController@index');
 
 
 });
+
+Route::get('dashboard/chart_total_wilayah','DashboardController@totalMiskinWilayah');
 
 
