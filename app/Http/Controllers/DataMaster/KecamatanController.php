@@ -181,6 +181,18 @@ class KecamatanController extends Controller
     return $list;
   }
 
+  public function getDetailDesa($id)
+  {
+    $query = Desa::where('id', $id)->get();
+
+    $result = array();
+    foreach ($query as $value) {
+     $result['desa'] = $value;
+     $result['kecamatan'] = $value->kecamatan()->first();
+    }
+
+    return response()->json($result);
+  }
 
 
 }

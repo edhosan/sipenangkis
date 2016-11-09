@@ -157,6 +157,14 @@ module.exports = [
           {name: 'admin'}
         ]
       },
+      {
+        name: 'Kelompok Penerima',
+        link: '/kelompok',
+        icon: ' fa-plus-square-o',
+        roles: [
+          {name: 'admin'}
+        ]
+      },
     ]
   },
   {

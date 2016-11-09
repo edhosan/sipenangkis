@@ -152,7 +152,6 @@ export default {
     'vuetable:action': function(action, data) {
          if (action == 'edit-item') {
            this.$router.go({path:'/rtm/edit_rtm/'+data.id})
-           console.log(data)
          } else if (action == 'delete-item') {
            this.$http.get(this.$root.$config.API + '/api/pembaharuan/'+data.id+'/delete').then((response)=>{
              toastr.success('Data berhasil dihapus.', 'Hapus Data', {timeOut: 3000})

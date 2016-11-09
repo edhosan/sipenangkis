@@ -92,4 +92,12 @@ class TindikatorController extends Controller
 
   }
 
+  public function deleteIndikator($id)
+  {
+    $penilaian = PenilaianPenerimaManfaat::find($id);
+    $penilaian->delete();
+
+    return response()->json($penilaian);
+  }
+
 }

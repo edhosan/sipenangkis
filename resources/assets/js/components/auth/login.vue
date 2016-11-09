@@ -18,14 +18,7 @@
           <span class="glyphicon glyphicon-lock form-control-feedback"></span>
           <span class="help-block" v-if="!validation.password">Password harus diisi.</span>
         </div>
-        <div class="row">
-          <div class="col-xs-8">
-            <div class="checkbox icheck">
-              <label>
-                <input type="checkbox"> Ingat saya?
-              </label>
-            </div>
-          </div>
+        <div class="row">         
           <!-- /.col -->
           <div class="col-xs-4">
             <button type="submit" class="btn btn-primary btn-block btn-flat" :disabled="!isValid">Login</button>

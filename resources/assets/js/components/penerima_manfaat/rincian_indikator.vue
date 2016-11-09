@@ -108,7 +108,8 @@ export default {
       arr_indikator:[],
       per_page: 10,
       fields:[
-        { name:'id' },
+        { name: '__sequence', title:'No.' },
+        { name:'id', visible: false },
         { name:'nilai' },
         { name:'kriteria' },
         { name:'created_at' },
@@ -256,7 +257,7 @@ export default {
             this.fetchIndikator()
             this.fetchHasil(data.id)
          } else if (action == 'delete-item') {
-           this.$http.get(this.$root.$config.API + '/api/pekerjaan/'+data.id+'/delete').then((response)=>{
+           this.$http.get(this.$root.$config.API + '/api/penerima_indikator/'+data.id+'/delete').then((response)=>{
              toastr.success('Data berhasil dihapus.', 'Hapus Data', {timeOut: 3000})
              this.$broadcast('vuetable:refresh')
            },(error)=>{

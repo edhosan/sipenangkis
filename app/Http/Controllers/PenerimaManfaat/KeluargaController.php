@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Keluarga;
 use App\Models\PenerimaManfaat;
 use Illuminate\Pagination\LengthAwarePaginator;
+use App\Models\PenilaianPenerimaManfaat;
 
 class KeluargaController extends Controller
 {
@@ -182,6 +183,44 @@ class KeluargaController extends Controller
                         ->first();
 
     return $keluarga;
+  }
+
+  public function detailKeluarga($id)
+  {
+    $keluarga = Keluarga::where('id', $id)->get();
+
+    $result = array();
+    foreach ($keluarga as $value) {
+      $result['keluarga'] = $value;
+      $result['pekerjaan'] = $value->pekerjaan()->first();
+      $result['pendidikan'] = $value->pendidikan()->first();
+      $result['intervensi'] = $value->intervensi()->get();
+
+      $penerima = $value->penerimaManfaat()->first();
+      $result['tempat'] = $penerima;
+      $result['indikator'] = $penerima->hasilIndikator()->get();
+
+      $desa = $penerima->desa()->first();
+      $result['desa'] = $desa;
+      $result['kecamatan'] = $desa->kecamatan()->first();
+
+    }
+
+    return response()->json($result);    
+  }
+
+  public function penilaianIndividu(Request $request, $id)
+  {
+    $keluarga = Keluarga::find($id);
+    $query = PenilaianPenerimaManfaat::where('m_pm_id',$keluarga->m_penerima_manfaat_id)->orderBy('id', 'desc');
+
+    $perPage = $request->has('per_page') ? (int) $request->per_page : null;
+    $page = $request->has('page') ? (int) $request->page : 1;
+
+    $result = $query->paginate($perPage);
+
+    return $result;
+
   }
 
 

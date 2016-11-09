@@ -1,30 +1,24 @@
 <template lang="html">
   <div class="row">
-    <div class="col-md-3">
-      <div class="box box-primary">
-           <div class="box-header with-border">
-             <h3 class="box-title">Sasaran Intervensi</h3>
-           </div>
-           <!-- /.box-header -->
-           <div class="box-body">
-             <ul class="treeview">
-               <li><a href="#"><span> Kawasan</span></a></li>
-               <li><a href="#"><span> Kelompok</span></a></li>
-               <li><a v-link="{ path: '/pengajuan/keluarga' }"><span> Keluarga</span></a></li>
-               <li><a href="#"><span> Individu</span></a></li></li>
-             </ul>
-           </div>
-           <!-- /.box-body -->
+    <div class="col-md-12">
+      <div class="nav-tabs-custom">
+          <ul class="nav nav-tabs">
+           <li class="active"><a href="#" @click="goPage('/pengajuan/kawasan')" data-toggle="tab"><span> Kawasan</span></a></li>
+           <li><a href="#" @click="goPage('/pengajuan/kelompok')" data-toggle="tab"><span> Kelompok</span></a></li>
+           <li><a href="#" @click="goPage('/pengajuan/keluarga')" data-toggle="tab"><span> Keluarga</span></a></li>
+           <li><a href="#" @click="goPage('/pengajuan/individu')" data-toggle="tab"><span> Individu</span></a></li></li>
+         </ul>
+         <div class="tab-content">
+            <router-view></router-view>
          </div>
-    </div>
-    <div class="col-md-9">
-      <router-view></router-view>
+      </div>
+      
+   
     </div>
   </div>
 </template>
 
 <script>
-var keluarga = require('./keluarga.vue');
 
 export default {
   data () {
@@ -34,24 +28,17 @@ export default {
   },
   computed: {},
   ready () {
-
+    this.$router.go({path: '/pengajuan/kawasan'})
   },
   attached () {},
   methods: {
-    tabClick:function(tab){
-      switch (tab) {
-        case '2':
-          break;
-        case '3':
-
-          break;
-        default:
-      }
-    },
-
+    goPage: function(page){
+      event.preventDefault()
+      this.$router.go({path: page})
+    }
   },
   components: {
-    keluarga
+    
   },
   route: {
       activate: function(t) {

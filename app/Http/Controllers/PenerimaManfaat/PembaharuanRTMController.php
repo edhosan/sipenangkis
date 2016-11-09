@@ -22,7 +22,7 @@ class PembaharuanRTMController extends Controller
                 $query->on('tbl.id','=','t_pm_penilaian.id');
               })
               ->where('m_penerima_manfaat_keluarga.hubungan','01')
-              ->select('m_penerima_manfaat.id','m_penerima_manfaat.nkk',DB::raw('concat(m_penerima_manfaat.alamat ," ", m_penerima_manfaat.rt," ",m_penerima_manfaat.rw) as alamat'),'m_penerima_manfaat_keluarga.nama','m_penerima_manfaat_keluarga.sex','m_kecamatan.name as kecamatan','m_desa.name as desa','t_pm_penilaian.nilai','t_pm_penilaian.kriteria');
+              ->select('m_penerima_manfaat.id','m_penerima_manfaat.nkk',DB::raw('concat(m_penerima_manfaat.alamat ," RT.", IFNULL(m_penerima_manfaat.rt,"")," RW.",IFNULL(m_penerima_manfaat.rw,"")) as alamat'),'m_penerima_manfaat_keluarga.nama','m_penerima_manfaat_keluarga.sex','m_kecamatan.name as kecamatan','m_desa.name as desa','t_pm_penilaian.nilai','t_pm_penilaian.kriteria');
 
     if($request->has('sort')){
       list($sortCol, $sortDir) = explode('|', $request->sort);

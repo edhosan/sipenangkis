@@ -41,6 +41,6 @@ class Keluarga extends Model
 
   public function intervensi()
   {
-    return $this->morphMany('individu','penerima');
+    return $this->morphMany('App\Models\ProsesIntervensi','penerima');
   }
 }

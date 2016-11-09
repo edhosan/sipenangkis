@@ -1,8 +1,8 @@
 <template lang="html">
-<div class="row">
+<div class="tab-pane active">
   <div class="box box-primary">
     <div class="box-header with-border">
-      <h3 class="box-title">Form Proses Intervensi</h3>
+      <h3 class="box-title">Form Proses Intervensi Keluarga</h3>
     </div>
     <form role="form" @submit.prevent="simpan">
       <div class="box-body">
@@ -155,13 +155,15 @@ export default {
       program: [],
       valueBentukIntervensi:[],
       bentuk_intervensi:[],
-      t_intervensi:{id:null,m_intervensi_id:null,tahun:0,penerima_id:this.$route.params.id,rujukan:'',userid:localStorage.userid},
+      t_intervensi:{id:null,m_intervensi_id:null,tahun:0,penerima_id:null,rujukan:'',userid:localStorage.userid},
       isLoading: false,
       nama_penerima:'',
-      isAction: 'add',
+      per_page:10,
+      isAction: this.$route.params.action,
       isRincian: 'list',
       fields:[
-        { name:'id', sortField: 'id' },
+        { name: '__sequence', title:'No.' },
+        { name:'id', sortField: 'id', visible: false },
         { name:'name', sortField: 'name', title:'Nama' },
         { name:'volume', sortField: 'volume' },
         { name:'satuan', sortField: 'satuan' },
@@ -209,14 +211,18 @@ export default {
     },
 
     url: function(){
-      return this.$root.$config.API + '/api/program_intervensi/'+this.t_intervensi.id+'/rincian'
+      return this.$root.$config.API + '/api/program_intervensi/rincian'
     }
 
   },
   ready () {
-    this.m_penerima_manfaat_id = this.$route.params.id
     this.fetchRef()
-    this.fetchKepalaKeluarga(this.$route.params.id)
+    if(this.isAction == 'add'){
+      this.m_penerima_manfaat_id = this.$route.params.id
+      this.fetchKepalaKeluarga(this.$route.params.id)
+    }else{
+      this.fetchData(this.$route.params.id)
+    }
   },
   attached () {},
   methods: {
@@ -233,7 +239,7 @@ export default {
 
     fetchIntervensi: function(program_id){
       this.$Progress.start()
-      this.$http.get(this.$root.$config.API + '/api/intervensi/'+program_id+'/4/intervensi_program').then((response)=>{
+      this.$http.get(this.$root.$config.API + '/api/intervensi/'+program_id+'/4/intervensi_program').then((response)=>{      
         this.$set('bentuk_intervensi',response.data)
         this.isLoading = false
         this.$Progress.finish()
@@ -270,14 +276,16 @@ export default {
       event.preventDefault()
       var self = this
 
-      var data = this.t_intervensi;
       var url = this.$root.$config.API
 
       if(this.isAction=='add'){
+          this.t_intervensi.penerima_id = this.$route.params.id
           url = url + '/api/program_intervensi/'+this.$route.params.id+'/store'
       }else{
-          url = url + '/api/program_intervensi/'+this.$route.params.id+'/store'
+          url = url + '/api/program_intervensi/update_intervensi_keluarga'
       }
+
+      var data = this.t_intervensi
 
       this.$http.post(url,data).then((response)=>{
         if(response.data.result!=null){
@@ -327,8 +335,8 @@ export default {
       this.$http.post(url,data).then((response)=>{
         toastr.success('Data berhasil disimpan.', 'Save Data', {timeOut: 3000})
         this.isRincian = 'list'
-        this.$broadcast('vuetable:refresh')
-        this.$Progress.finish()
+        this.$Progress.finish()      
+        this.setFilter(response.data.t_intervensi_id)
       },(error)=>{
         if(error.data.error.code==23000){
           toastr.error('Duplikat data entry.', 'Error', {timeOut: 3000})
@@ -343,7 +351,32 @@ export default {
     cancelRincian: function(){
       event.preventDefault()
       this.isRincian = 'list'
-    }
+    },
+
+    fetchData: function(id){
+      this.$Progress.start()
+      this.$http.get(this.$root.$config.API + '/api/program_intervensi/'+id+'/edit').then((response)=>{
+        this.$set('nama_penerima',response.data.kk.nama)
+        this.updateProgram({value:response.data.program.id, label: response.data.program.name})
+        this.updateBentukIntervensi({value: response.data.intervensi.id, label: response.data.intervensi.name})
+        this.$set('t_intervensi', response.data.t_intervensi)
+        this.setFilter(response.data.t_intervensi.id)
+        this.$Progress.finish()
+      },(error)=>{
+        console.log(error)
+        this.$Progress.fail()
+      })
+    },
+
+    setFilter: function(intervensi_id) {
+      this.moreParams = [
+          't_intervensi_id=' + intervensi_id
+      ]     
+      this.$nextTick(function() {
+          this.$broadcast('vuetable:refresh')
+      })
+    },
+
   },
   components: {
     Multiselect,

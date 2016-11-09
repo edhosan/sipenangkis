@@ -174,8 +174,7 @@ export default {
 
     },
 
-    entryItem: function(){
-      console.log('test')
+    entryItem: function(){   
       this.isAction = 'add'
       this.pekerjaan = {id:null,name:''}
       this.isFreeze = false

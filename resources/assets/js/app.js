@@ -11,9 +11,10 @@
  const vueConfig = require('vue-config');
  var Resource = require('vue-resource');
  var moment = require('vue-moment');
- var VuetablePagination = require('vuetable/src/components/VuetablePaginationBootstrap.vue')
+ var VuetablePagination = require('./components/ui/VuetablePaginationBootstrap.vue')
  var VuetablePaginationDropdown = require('vuetable/src/components/VuetablePaginationDropdown.vue')
  var VuetablePaginationPager = require('./components/ui/VuetablePaginationBootstrapPager.vue')
+ var VuetableRincianIntervensi = require('./components/ui/intervensi_detail_row.vue')
  import VueProgressBar from 'vue-progressbar'
 
 
@@ -42,13 +43,14 @@ Vue.use(VueProgressBar, {
  Vue.component('vuetable-pagination', VuetablePagination)
  Vue.component('vuetable-pagination-dropdown', VuetablePaginationDropdown)
  Vue.component('vuetable-pagination-pager', VuetablePaginationPager)
+ Vue.component('intervensi-detail-row', VuetableRincianIntervensi)
 
  Vue.http.options.root = '/root';
  Vue.http.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('id_token');
 
 Vue.http.interceptors.push((request, next) => {
     next((response)=>{
-      //console.log(response)
+    //  console.log(response)
     });
 });
 
@@ -103,12 +105,22 @@ Vue.http.interceptors.push((request, next) => {
    '/pengajuan':{
      component: require('./components/program_intervensi/pengajuan.vue'),
      subRoutes:{
+       '/kawasan': { component: require('./components/program_intervensi/kawasan.vue') },
+       '/detail_kawasan/:id': { component: require('./components/program_intervensi/detail_kawasan.vue') },
+       '/form_intervensi_kawasan/:action/:id': { component: require('./components/program_intervensi/form_intervensi_kawasan.vue') },
        '/keluarga': { component: require('./components/program_intervensi/keluarga.vue') },
        '/detail_keluarga/:id': { component: require('./components/program_intervensi/detail_keluarga.vue') },
-       '/form_intervensi/:id': { component: require('./components/program_intervensi/form_intervensi.vue') }
+       '/form_intervensi/:action/:id': { component: require('./components/program_intervensi/form_intervensi.vue') },
+       '/form_intervensi_individu/:action/:id': { component: require('./components/program_intervensi/form_intervensi_individu.vue') },
+       '/form_intervensi_kelompok/:action/:id': { component: require('./components/program_intervensi/form_intervensi_kelompok.vue') },
+       '/individu': { component: require('./components/program_intervensi/individu.vue') },
+       '/detail_individu/:id': { component: require('./components/program_intervensi/detail_individu.vue') },
+       '/kelompok': { component: require('./components/program_intervensi/kelompok.vue') },
+       '/detail_kelompok/:id': { component: require('./components/program_intervensi/detail_kelompok.vue') },
 
      }
     },
+    '/kelompok':{component: require('./components/penerima_manfaat/kelompok_penerima.vue')},
     '/export':{component: require('./components/tools/import.vue') },
  })
 

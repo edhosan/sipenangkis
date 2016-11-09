@@ -290,12 +290,12 @@ export default {
     editItem: function(item){
       this.$Progress.start()
 
-      var self = this
+      var self = this    
       this.user.id = item.id
       this.user.name = item.name
       this.user.userid = item.userid
       this.user.password = item.password
-      this.stakeholderValue = {value:item.id,label:item.name}
+      this.stakeholderValue = {value:item.m_stakeholder_id,label:item.stakeholder.name}
       this.user.m_stakeholer_id = item.id
       this.$http.get(this.$root.$config.API + '/api/user/'+item.id+'/edit').then((response)=>{
         this.$set('multiValue', response.data)

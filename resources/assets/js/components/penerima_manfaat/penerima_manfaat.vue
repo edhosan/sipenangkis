@@ -123,13 +123,13 @@ export default {
           t.next();
       }
   },
-  watch:{
+ /* watch:{
     '$route'(to, from){
       if(to.params.action == 'add_rtm'){
         this.refresh()
       }
     }
-  }
+  }*/
 }
 </script>
 

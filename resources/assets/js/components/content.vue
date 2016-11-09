@@ -8,9 +8,8 @@
     </section>
 
     <!-- Main content -->
-    <section class="content">
-
-        <router-view class="view" keep-alive></router-view>
+    <section class="content">        
+        <router-view keep-alive></router-view>
         <vue-progress-bar></vue-progress-bar>
     </section>
     <!-- /.content -->

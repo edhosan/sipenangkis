@@ -17,6 +17,6 @@ class Desa extends Model
 
     public function intervensi()
     {
-      return $this->morphMany('kawasan','penerima');
+      return $this->morphMany('App\Models\ProsesIntervensi','penerima');
     }
 }
