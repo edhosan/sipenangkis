@@ -237,16 +237,6 @@ class KelompokPenerimaController extends Controller {
 		$penerima = KelompokPenerima::find($id);
 
 		return response()->json($penerima->delete());
-	}
-
-	public function detailKelompok($id)
-	{
-		$kelompok = Kelompok::where('id', $id)->get();
-
-		$result = array();
-		foreach ($kelompok as $value) {
-			$result['kelompok'] = $value;
-		}
-	}
+	}	
 
 }

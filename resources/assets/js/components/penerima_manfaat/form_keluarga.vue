@@ -36,7 +36,6 @@
               <datepicker v-ref:dp :value.sync="anggota.tgl_lhr" format='dd-MM-yyyy' placeholder="Pilih tanggal lahir">
               </datepicker>
             </div>
-
             <span class="help-block" v-if="!validation.tgl_lhr">Tanggal lahir harus diisi.</span>
           </div>
           <div class="form-group" v-bind:class="{'has-error':!validation.tempat}">
@@ -203,9 +202,9 @@
       <!-- /.box-body -->
       </div>
       <div class="box-footer">
-        <button v-if="isAction == 'add'" type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Simpan</button>
-        <button v-if="isAction == 'edit'"type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Ubah</button>
-        <button type="button" class="btn btn-warning" @click.prevent="cancel">Batal</button>
+        <button v-if="action == 'add'" type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Simpan</button>
+        <button v-if="action == 'edit'"type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Ubah</button>
+        <button class="btn btn-warning" @click.prevent="cancel()">Cancel</button>
       </div>
     </form>
   </div>
@@ -214,11 +213,11 @@
 <script>
 var datepicker = require('vue-strap').datepicker;
 import { Multiselect } from 'vue-multiselect';
+import mixin from '../mixins/refdata.js'
 
 export default {
   data () {
     return {
-      isAction:'add',
       valueAgama:[],
       agama:[],
       valueStatus:[],
@@ -233,13 +232,16 @@ export default {
       valuePekerjaan:[],
       pekerjaan:[],
       valuePendidikan:[],
-      pendidikan:[]
+      pendidikan:[],
+      anggota:{id:0, m_penerima_manfaat_id:0, kepala:'', nik: '', nama: '', sex:'',tgl_lhr:'',tempat_lhr:'',agama:'',status:'',hubungan:'',hubungan_ket:'',akta_nikah:'',kartu_identitas:'',disabilitas_jenis:'',disabilitas_kategori:'',penyakit_kronis:'',pekerjaan:'',pendidikan_jenjang:'',nama_sekolah:''},
     }
   },
+  mixins:[mixin], 
   props:{
-    isfreeze:Boolean,
-    anggota: Object
+    action: String,
+    id: Number
   },
+
   computed: {
     validation: function(){
       return{
@@ -272,7 +274,10 @@ export default {
     this.fetchKartu()
     this.fetchDisabilitas()
     this.fetchPekerjaan()
-    this.fetchPendidikan()
+    this.fetchPendidikan() 
+    if(this.action = 'edit'){
+      this.fetchData()
+    } 
   },
   attached () {},
   methods: {
@@ -370,6 +375,22 @@ export default {
       })
     },
 
+    fetchData: function(){
+      this.$http.get(this.$root.$config.API + '/api/keluarga/'+this.id+'/detail_keluarga').then((response)=>{
+        console.log(response) 
+        this.$set('anggota', response.data.keluarga)
+        this.valueAgama = {value:response.data.keluarga.agama,label:this.agamaLabel(response.data.keluarga.agama)}
+        this.valueStatus = {value:response.data.keluarga.status,label:this.statusLabel(response.data.keluarga.status)}
+        this.valueHubungan = {value:response.data.keluarga.hubungan,label:this.hubLabel(response.data.keluarga.hubungan)}
+        this.valueKartu = {value:response.data.keluarga.kartu_identitas,label:this.kartuLabel(response.data.keluarga.kartu_identitas)}
+        this.valueDisabilitas = {value:response.data.keluarga.disabilitas_jenis,label:this.disabilitasLabel(response.data.keluarga.disabilitas_jenis)}
+        this.valuePekerjaan = {value:response.data.pekerjaan.id,label:response.data.pekerjaan.pekerjaan}
+        this.valuePendidikan = {value:response.data.pendidikan.id,label:response.data.pendidikan.name}       
+      },(error)=>{
+        console.log(error)
+      })
+    },
+
     simpan: function(){
       event.preventDefault()
       this.anggota.m_penerima_manfaat_id = this.$parent.$parent.$data.penerima_manfaat_id
@@ -378,6 +399,7 @@ export default {
 
       var data = this.anggota
       var url = this.$root.$config.API
+      console.log(this.isAction)
 
       if(this.isAction=='add'){
           url = url + '/api/keluarga/'+this.anggota.m_penerima_manfaat_id+'/store'
@@ -408,7 +430,8 @@ export default {
       this.valueDisabilitas = []
       this.valuePekerjaan = []
       this.valuePendidikan = []
-      this.$dispatch('clear')
+      this.anggota = {id:0, m_penerima_manfaat_id:0, kepala:'', nik: '', nama: '', sex:'',tgl_lhr:'',tempat_lhr:'',agama:'',status:'',hubungan:'',hubungan_ket:'',akta_nikah:'',kartu_identitas:'',disabilitas_jenis:'',disabilitas_kategori:'',penyakit_kronis:'',pekerjaan:'',pendidikan_jenjang:'',nama_sekolah:''}
+      this.$dispatch('cancel')
     },
 
   },

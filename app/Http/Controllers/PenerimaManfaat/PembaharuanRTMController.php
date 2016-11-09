@@ -34,7 +34,7 @@ class PembaharuanRTMController extends Controller
     if($request->exists('filter')){
       if($request->exists('key')){
         $query->where(function($q) use($request){
-          $value = "{$request->filter}";
+          $value = "{$request->filter}%";
           $key = "{$request->key}";
           $q->where($key, 'like', $value);
         });

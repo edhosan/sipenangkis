@@ -93,8 +93,13 @@ Vue.http.interceptors.push((request, next) => {
    '/program':{
       component: require('./components/datamaster/program.vue')
    },
-   '/rtm/:action/:id':{
-      component: require('./components/penerima_manfaat/penerima_manfaat.vue')
+   '/rtm':{
+      component: require('./components/penerima_manfaat/penerima_manfaat.vue'),
+      subRoutes:{
+        'tempat/:action/:id' :{ component: require('./components/penerima_manfaat/tempat_tinggal.vue')  },
+        'anggota/:action/:id' :{ component: require('./components/penerima_manfaat/anggota_keluarga.vue')  },
+        'form_anggota/:action/:id' :{ component: require('./components/penerima_manfaat/form_keluarga.vue')  }
+      }
    },
    '/kluster':{
       component: require('./components/datamaster/kluster.vue')

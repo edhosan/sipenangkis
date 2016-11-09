@@ -74,7 +74,8 @@
     <div class="box-footer">
       <button v-if="isAction == 'add'" type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Simpan</button>
       <button v-if="isAction == 'edit'"type="submit" class="btn btn-primary" :disabled="!isValid || isfreeze">Ubah</button>
-      <button type="button" class="btn btn-warning" @click.prevent="cancel">Batal</button>
+      <button type="button" v-if="isAction == 'add'" class="btn btn-warning" @click.prevent="cancel">Batal</button>
+      <a v-if="isAction == 'edit'" v-link="{ path: '/updating' }" class="btn btn-warning"> Batal</a>
     </div>
     </form>
   </div>
@@ -85,18 +86,17 @@ import { Multiselect } from 'vue-multiselect';
 export default {
   data () {
     return {
-      isAction: 'add',
+      isAction: this.$route.params.action,
       valueKecamatan:[],
       valueDesa:[],
       kecamatan:[],
       desa:[],
       isLoading: false,
-      anggota_keluarga:[]
+      anggota_keluarga:[],
+      keluarga:{id:null, m_desa_id:null, rt:'', alamat:'',no_rumah:'',domisili:0,nkk:'',userid:localStorage.userid,rw:'',nama:'',anggota_keluarga:this.anggota_keluarga},
     }
   },
   props:{
-    keluarga: Object,
-    isfreeze: Boolean
   },
   computed: {
     validation: function(){
@@ -119,6 +119,9 @@ export default {
   ready () {
     this.fetchKecamatan()
     this.fetchDesa()
+    if(this.isAction=='edit'){
+      this.fetchKeluarga(this.$route.params.id)
+    }
   },
   attached () {},
   methods: {
@@ -140,6 +143,21 @@ export default {
       },(error)=>{
         console.log(error)
         this.$Progress.fail()
+      })
+    },
+
+    fetchKeluarga: function(id){
+      this.$Progress.start()
+      this.$http.get(this.$root.$config.API + '/api/penerima_manfaat/'+id+'/index').then((response)=>{
+        this.$set('keluarga', response.data.penerima_manfaat)
+        this.valueKecamatan = { value: response.data.penerima_manfaat.desa.kecamatan.id, label: response.data.penerima_manfaat.desa.kecamatan.name}
+        this.valueDesa = { value: response.data.penerima_manfaat.desa.id, label: response.data.penerima_manfaat.desa.name}     
+        this.penerima_manfaat_id = this.keluarga.id
+        this.penilaian_id = response.data.hasil_indikator.id
+        this.$Progress.finish()
+      },(error)=>{
+        this.$Progress.fail()
+        console.log(error)
       })
     },
 

@@ -97,11 +97,12 @@ Route::group(['middleware' => 'jwt.auth'], function(){
   Route::get('keluarga/ref_agama','PenerimaManfaat\KeluargaController@getAgama');
   Route::get('keluarga/ref_kartu','PenerimaManfaat\KeluargaController@getKartuIdentitas');
   Route::get('keluarga/ref_disabilitas','PenerimaManfaat\KeluargaController@getDisabilitas');
-  Route::get('keluarga/{penerima_id}/index','PenerimaManfaat\KeluargaController@index');
+  Route::get('keluarga/index','PenerimaManfaat\KeluargaController@index');
   Route::post('keluarga/{penerima_id}/store','PenerimaManfaat\KeluargaController@store');
   Route::get('keluarga/{penerima_id}/kepala_keluarga','PenerimaManfaat\KeluargaController@getKepalaKeluarga');
   Route::get('keluarga/{id}/detail_keluarga','PenerimaManfaat\KeluargaController@detailKeluarga');
   Route::get('keluarga/{id}/indikator_individu','PenerimaManfaat\KeluargaController@penilaianIndividu');
+  Route::get('keluarga/{id}/delete','PenerimaManfaat\KeluargaController@delete');
 
   Route::get('kelompok/index','PenerimaManfaat\KelompokPenerimaController@index');
   Route::get('kelompok/{id}/edit','PenerimaManfaat\KelompokPenerimaController@edit');
@@ -159,7 +160,7 @@ Route::group(['middleware' => 'jwt.auth'], function(){
 });
 
 
-
+Route::get('monev/index','Monitoring\MonevIntervensiController@index');
 
 
 

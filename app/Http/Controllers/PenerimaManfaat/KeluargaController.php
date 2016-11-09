@@ -112,33 +112,28 @@ class KeluargaController extends Controller
     return $penerimaManfaat->anggotaKeluarga()->save($keluarga);
   }
 
-  public function index(Request $request, $id)
+  public function index(Request $request)
   {
     if($request->has('sort')){
       list($sortCol, $sortDir) = explode('|', $request->sort);
-      $query = Keluarga::where('m_penerima_manfaat_id',$id)->with('pekerjaan','pendidikan')->orderBy($sortCol, $sortDir);
+      $query = Keluarga::orderBy($sortCol, $sortDir);
     }else{
-      $query = Keluarga::where('m_penerima_manfaat_id')->with('pekerjaan','pendidikan')->orderBy('hubungan', 'asc');
+      $query = Keluarga::orderBy('hubungan', 'asc');
     }
 
     if($request->exists('filter')){
       $query->where(function($q) use($request){
-        $value = "%{$request->filter}%";
-        $q->where('id', 'like', $value)
-          ->orWhere('name','like',$value);
+        $value = "{$request->filter}";
+        $q->where('m_penerima_manfaat_id', '=', $value);
       });
     }
 
     $perPage = $request->has('per_page') ? (int) $request->per_page : null;
     $page = $request->has('page') ? (int) $request->page : 1;
 
-    $result = $query->get()->toArray();
-    $offset = ($page * $perPage) - $perPage;
-    $itemCurrentPage = array_slice($result, $offset, $perPage, true);
-    $result = new LengthAwarePaginator($itemCurrentPage, count($result), $perPage, $page);
-    $result = $result->toArray();
+    $result = $query->paginate($perPage);
 
-    return $result;
+    return response()->json($result);
   }
 
   public function update(Request $request,$m_penerima_manfaat_id,$id)
@@ -168,10 +163,9 @@ class KeluargaController extends Controller
     return $keluarga;
   }
 
-  public function delete($m_penerima_manfaat_id,$id)
+  public function delete($id)
   {
-    $keluarga = Keluarga::where('m_penerima_manfaat_id',$m_penerima_manfaat_id)
-                        ->where('id',$id)
+    $keluarga = Keluarga::where('id',$id)
                         ->first();
     return response()->json($keluarga->delete());
   }

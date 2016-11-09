@@ -9,7 +9,7 @@
 
     <!-- Main content -->
     <section class="content">        
-        <router-view keep-alive></router-view>
+        <router-view></router-view>
         <vue-progress-bar></vue-progress-bar>
     </section>
     <!-- /.content -->
